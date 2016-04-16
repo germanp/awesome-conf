@@ -12,6 +12,7 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local runner = require("runonce")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -48,16 +49,8 @@ editor = "emacsclient -c -a emacs"
 editor_cmd = terminal .. " -e " .. editor
 
 -- {{{ Autostart applications
-function run_once(cmd)
-  findme = cmd
-  firstspace = cmd:find(" ")
-  if firstspace then
-     findme = cmd:sub(0, firstspace-1)
-  end
-  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
-end
+runner.run('dex -a -e Awesome')
 
-run_once('dex -a -e Awesome')
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
