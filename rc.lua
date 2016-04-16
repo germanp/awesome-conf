@@ -43,7 +43,7 @@ end
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
+terminal = "xfce4-terminal"
 editor = "emacsclient -c -a emacs"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -100,7 +100,7 @@ tyrannical.tags = {
         layout      = awful.layout.suit.tile, -- Use the tile layout
         selected    = true,
         class       = { --Accept the following classes, refuse everything else (because of "exclusive=true")
-            "xterm" , "urxvt" , "aterm","URxvt","XTerm","konsole","terminator","gnome-terminal"
+            "xterm" , "urxvt" , "aterm","URxvt","XTerm","konsole","terminator","gnome-terminal", "xfce4-terminal"
         }
     } ,
     {
@@ -112,7 +112,7 @@ tyrannical.tags = {
         layout      = awful.layout.suit.max,      -- Use the max layout
         class = {
             "Opera"         , "Firefox"        , "Rekonq"    , "Dillo"        , "Arora",
-            "Chromium"      , "nightly"        , "minefield"     }
+            "Chromium"      , "nightly"        , "minefield",  "Pale moon" }
     },
     {
         name        = "Testing",
@@ -152,10 +152,11 @@ tyrannical.tags = {
                              -- client in the "class" section will start. It will be created on
                              -- the client startup screen
         exclusive   = true,
+        no_focus_stealing_out = true,
         layout      = awful.layout.suit.max,
         class       = {
             "Assistant"     , "Okular"         , "Evince"    , "EPDFviewer"   , "xpdf",
-            "Xpdf"          ,                                        }
+            "Xpdf"          , "LibreOffice"                                       }
     } ,
 }
 
@@ -388,8 +389,11 @@ globalkeys = awful.util.table.join(
                               "' -sf '" .. beautiful.fg_focus .. "'")
        end),
     -- Emacs
-    awful.key({ modkey }, "e", function () awful.util.spawn("emacsclient -c") end),
+    awful.key({ modkey }, "e", function () awful.util.spawn(editor) end),
     awful.key({ modkey }, "l", function () awful.util.spawn("slock") end),
+    awful.key({ altkey }, "2", function () awful.util.spawn("~/.screenlayout/proyector_only.sh") end),
+    awful.key({ altkey }, "3", function () awful.util.spawn("~/.screenlayout/lcd_y_proyector.sh") end),
+
 
     -- ALSA volume control
     awful.key({ altkey }, "Up",
@@ -495,6 +499,24 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
+
+    -- LibreOffice
+    {   rule_any = { class = { "openoffice",    "soffice", "Soffice", "LibreOffice",
+                               "libreoffice-writer",  "libreoffice-base",  "libreoffice-impress", "libreoffice-calc", "libreoffice-draw", "libreoffice-math", "libreoffice-startcenter"  }},
+        callback = function(c)
+           awful.client.property.set(c, "overwrite_class", "libreoffice")
+        end
+    },
+    {   rule = { name = "LibreOffice 4.3", class = "Soffice", type = "normal"},
+        callback = function(c)
+           awful.client.property.set(c, "overwrite_class", "libreoffice-fullscreen")
+        end,
+        properties = {
+           screen = 2,
+           skip_taskbar = true,
+           maximized = true,
+           focusable = true}
+    }
 }
 -- }}}
 
